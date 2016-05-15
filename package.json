@@ -1,0 +1,17 @@
+{
+  "name": "nyota",
+  "version": "0.0.0",
+  "description": "Processes and responds to your words, spoken through the command line.",
+  "main": "index.js",
+  "scripts": {
+    "test": "jasmine"
+  },
+  "keywords": [
+    "nlp",
+    "grammar",
+    "nyota",
+    "cli"
+  ],
+  "author": "Patrick Grasso",
+  "license": "MIT"
+}
