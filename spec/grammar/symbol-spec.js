@@ -261,4 +261,40 @@ describe('Sym', () => {
 
   });
 
+  describe('matches() [with variables]', () => {
+
+    it('is true when one of two similar Syms has "?[var]" as a feature', () => {
+      s = new Sym('V', { num: '?n' });
+      ss = new Sym('V', { num: 'pl' });
+      expect(s.matches(ss)).toBe(true);
+    });
+
+    it('is true when both Syms have a variable feature', () => {
+      s = new Sym('V', { num: '?n' });
+      ss = new Sym('V', { num: '?t' });
+      expect(s.matches(ss)).toBe(true);
+    });
+
+    it(`is true if multiple features specify the same var, and corresponding
+        features have the same values`.replace(/\s+/g, ' '), () => {
+      s = new Sym('V', { numA: '?n', numB: '?n' });
+      ss = new Sym('V', { numA: 'sg', numB: 'sg' });
+      expect(s.matches(ss)).toBe(true);
+    });
+
+    it(`is false if multiple features specify the same var, and corresponding
+        features have different values`.replace(/\s+/g, ' '), () => {
+      s = new Sym('V', { numA: '?n', numB: '?n' });
+      ss = new Sym('V', { numA: 'sg', numB: 'pl' });
+      expect(s.matches(ss)).toBe(false);
+    });
+
+    it('is false if one Sym omits the other\'s variable feature', () => {
+      s = new Sym('V', { num: '?n' });
+      ss = new Sym('V');
+      expect(s.matches(ss)).toBe(false);
+    });
+
+  });
+
 });

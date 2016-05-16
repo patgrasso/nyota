@@ -1,3 +1,4 @@
+/*eslint no-fallthrough:0*/
 'use strict';
 
 
@@ -9,8 +10,7 @@ class Sym {
     if (typeof name !== 'string' && typeof name === 'object') {
       features = name;
       name = features.name;
-      delete features.name;
-    }
+      delete features.name; }
 
     features = features || {};
 
@@ -85,9 +85,16 @@ class Sym {
   }
 
 
-  static matches(symA, symB) {
+  static matches(symA, symB, env) {
     var typeA = typeof symA
       , typeB = typeof symB;
+
+    // Instantiate environment if one is not provided
+    env = env || {};
+
+    if (typeof env !== 'object') {
+      throw new TypeError('Environment must be an object');
+    }
 
     // Both are null -> true
     if (symA == null && symB == null) {
@@ -101,7 +108,10 @@ class Sym {
 
     // At this point, both must be non-null objects
     // Compare features (must be equal IF they exist)
-    if (!compareAttributes(symA, symB) || !compareAttributes(symB, symA)) {
+    if (
+      !compareAttributes(symA, symB, env) ||
+      !compareAttributes(symB, symA, env)
+    ) {
       return false;
     }
     return true;
@@ -110,8 +120,8 @@ class Sym {
 }
 
 
-function compareAttributes(symA, symB) {
-  var prop;
+function compareAttributes(symA, symB, env) {
+  var prop, ret;
 
   if (Array.isArray(symA) && Array.isArray(symB)) {
     if (symA.length !== symB.length) {
@@ -119,16 +129,28 @@ function compareAttributes(symA, symB) {
     }
   }
   for (prop in symA) {
-    if (symB[prop] !== undefined) {
+    if (symB[prop] !== undefined || extractVarName(symA[prop]) != null) {
       switch (typeof symA[prop]) {
       case 'object':
-        if (!Sym.matches(symA[prop], symB[prop])) {
+        if (!Sym.matches(symA[prop], symB[prop], env)) {
           return false;
         }
         break;
 
       case 'function':
         break;
+
+      case 'string':
+        // Check to see if one of the symbols has a variable for this property
+        // If so, compare & set vars appropriately in the environment
+        ret = checkVariables(symA, symB, prop, env);
+        if (ret === false) {
+          return false;
+        } else if (ret === true) {
+          break;
+        }
+        // if ret === null, fall through to ordinary comparison (this means
+        // that neither symbols had variables for this property)
 
       default:
         if (symA[prop] !== symB[prop]) {
@@ -139,6 +161,43 @@ function compareAttributes(symA, symB) {
     }
   }
   return true;
+}
+
+
+function extractVarName(str) {
+  return ((typeof str === 'string') && (str[0] === '?')) ? str.slice(1) : null;
+}
+
+
+function checkVariables(symA, symB, prop, env) {
+  var varA = extractVarName(symA[prop])
+    , varB = extractVarName(symB[prop]);
+
+  if (varA && varB) {
+    if (
+      !checkOrSetVariable(varA, env, env[varB] || symB[prop]) ||
+      !checkOrSetVariable(varB, env, env[varA] || symA[prop])
+    ) {
+      return false;
+    }
+  } else if (varA && !checkOrSetVariable(varA, env, symB[prop])) {
+    return false;
+  } else if (varB && !checkOrSetVariable(varB, env, symA[prop])) {
+    return false;
+  }
+  if (varA || varB) {
+    return (env[varA] != null) || (env[varB] != null);
+  }
+  return null;
+}
+
+
+function checkOrSetVariable(varName, env, value) {
+  if (env[varName] === undefined) {
+    env[varName] = value;
+    return true;
+  }
+  return Sym.matches(env[varName], value);
 }
 
 
