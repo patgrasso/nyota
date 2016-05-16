@@ -61,7 +61,7 @@ class CFG {
       , i;
 
     // If LHS is not a Sym, make it one
-    if (!(lhs instanceof Sym)) {
+    if (!(lhs instanceof Sym) && lhs != null) {
       lhs = this.symbol(lhs);
     }
 
@@ -86,6 +86,10 @@ class CFG {
         return productions[i];
       }
     }
+
+    if (lhs == null) {
+      throw new TypeError('No matching RHS Production found, and LHS is null');
+    }
     production = new Production(lhs, rhs);
     priv[this].productions.push(production);
     return production;
@@ -106,29 +110,4 @@ class CFG {
 
 }
 
-
-var cfg = new CFG()
-  , s   = cfg.symbol('S')
-  , np  = cfg.symbol('NP')
-  , ss  = cfg.symbol('S');
-
-console.log(s === ss);
-console.log(np);
-console.log(cfg.symbols());
-
-
-console.log(cfg.production('S', 'NP'));
-console.log(cfg.production('S', 'NP', 'VP'));
-console.log(cfg.productions());
-
-console.log('----');
-
-console.log(cfg.production(
-  cfg.symbol('S'),
-  [
-    cfg.symbol('NP'),
-    cfg.symbol('DP')
-  ]
-));
-
-console.log(cfg.symbols());
+module.exports = CFG;

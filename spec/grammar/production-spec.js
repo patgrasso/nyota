@@ -1,7 +1,7 @@
 /*global describe, it, expect, beforeAll, jasmine*/
 
-const Sym         = require('../../cfg/symbol');
-const Production  = require('../../cfg/production');
+const Sym         = require('../../grammar/symbol');
+const Production  = require('../../grammar/production');
 var   p, f;
 
 describe('Production', () => {

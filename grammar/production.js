@@ -73,13 +73,16 @@ class Production {
     }
 
     // The case where lhs AND rhs are specified
-    if (lhs instanceof Sym && Array.isArray(rhs)) {
+    if (Array.isArray(rhs)) {
+      // a. lhs is a Sym
       if (
-        !prod.lhs.equals(lhs) ||
-        prod.rhs.length !== rhs.length
+        lhs != null &&
+        (!prod.lhs.equals(lhs) ||
+        prod.rhs.length !== rhs.length)
       ) {
         return false;
       }
+      // b. lhs is null (in which case, ignore it and only consider the RHS)
       for (i in prod.rhs) {
         if (!prod.rhs[i].equals(rhs[i])) {
           return false;

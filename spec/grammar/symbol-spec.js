@@ -1,6 +1,6 @@
 /*global describe, it, expect, beforeAll*/
 
-const Sym = require('../../cfg/symbol');
+const Sym = require('../../grammar/symbol');
 var   s, f;
 
 describe('Sym', () => {
