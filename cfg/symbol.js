@@ -6,8 +6,15 @@ class Sym {
   constructor(name, features) {
     var prop;
 
+    if (typeof name !== 'string' && typeof name === 'object') {
+      features = name;
+      name = features.name;
+      delete features.name;
+    }
+
     features = features || {};
-    if (typeof features !== 'object') {
+
+    if (name == null || typeof features !== 'object') {
       throw new TypeError('Features must be specified as an object');
     }
 
