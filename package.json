@@ -4,7 +4,7 @@
   "description": "Processes and responds to your words, spoken through the command line.",
   "main": "index.js",
   "scripts": {
-    "test": "jasmine"
+    "test": "istanbul cover --include-all-sources jasmine"
   },
   "keywords": [
     "nlp",
@@ -13,5 +13,9 @@
     "cli"
   ],
   "author": "Patrick Grasso",
-  "license": "GPL-3"
+  "license": "GPL-3",
+  "devDependencies": {
+    "istanbul": "^0.4.3",
+    "jasmine": "^2.4.1"
+  }
 }
