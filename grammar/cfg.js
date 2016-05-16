@@ -23,7 +23,7 @@ class CFG {
     if (typeof name === 'object') {
       features      = name;
     }
-    name            = name || features.name;
+    name            = (typeof name === 'string') ? name : features.name;
     features        = features || {};
 
     // If the thing passed in is a Sym, we cannot assign to it's
@@ -59,6 +59,12 @@ class CFG {
     var productions = priv[this].productions
       , production
       , i;
+
+    // If LHS is a Production object, just add it and return it
+    if (lhs instanceof Production) {
+      productions.push(lhs);
+      return lhs;
+    }
 
     // If LHS is not a Sym, make it one
     if (!(lhs instanceof Sym) && lhs != null) {
@@ -102,7 +108,7 @@ class CFG {
     if (arguments.length > 2) {
       rhs = Array.prototype.slice.call(arguments, 1);
     }
-    if (!Array.isArray(rhs)) {
+    if (rhs != null && !Array.isArray(rhs)) {
       rhs = [rhs];
     }
     return priv[this].productions.filter(p => p.equals(lhs, rhs));
