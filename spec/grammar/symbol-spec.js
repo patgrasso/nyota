@@ -1,7 +1,7 @@
 /*global describe, it, expect, beforeAll*/
 
 const Sym = require('../../grammar/symbol');
-var   s, f;
+var   s, ss, f;
 
 describe('Sym', () => {
 
@@ -83,32 +83,32 @@ describe('Sym', () => {
     });
 
     it('is true for two similar Syms', () => {
-      var ss  = new Sym('NP');
-      s       = new Sym('NP');
+      ss = new Sym('NP');
+      s = new Sym('NP');
       expect(s.equals(ss)).toBe(true);
     });
 
     it('is false for two Syms of different names', () => {
-      var ss  = new Sym('NP');
-      s       = new Sym('S');
+      ss = new Sym('NP');
+      s = new Sym('S');
       expect(s.equals(ss)).toBe(false);
     });
 
     it('is false when one Sym has features and the other does not', () => {
-      var ss  = new Sym('NP', { num: 'pl' });
-      s       = new Sym('NP');
+      ss = new Sym('NP', { num: 'pl' });
+      s = new Sym('NP');
       expect(s.equals(ss)).toBe(false);
     });
 
     it('is true both have the same features', () => {
-      var ss  = new Sym('NP', { num: 'pl' });
-      s       = new Sym('NP', { num: 'pl' });
+      ss = new Sym('NP', { num: 'pl' });
+      s = new Sym('NP', { num: 'pl' });
       expect(s.equals(ss)).toBe(true);
     });
 
     it('is false when both have the same # of features (not the same)', () => {
-      var ss  = new Sym('NP', { num: 'pl' });
-      s       = new Sym('NP', { type: 3 });
+      ss = new Sym('NP', { num: 'pl' });
+      s = new Sym('NP', { type: 3 });
       expect(s.equals(ss)).toBe(false);
     });
 
@@ -125,6 +125,128 @@ describe('Sym', () => {
       expect(s.equals({
         misMatched: 'property'
       })).toBe(false);
+    });
+
+  });
+
+  describe('matches', () => {
+
+    it('is true when the same Sym is passed twice', () => {
+      s = new Sym('NP', { num: 'pl' });
+      expect(s.matches(s)).toBe(true);
+    });
+
+    it('is true when two similar Syms are given', () => {
+      ss = new Sym('NP', { num: 'pl' });
+      s = new Sym('NP', { num: 'pl' });
+      expect(s.matches(ss)).toBe(true);
+    });
+
+    it('is true for null featured Syms of the same name', () => {
+      ss = new Sym('NP');
+      s = new Sym('NP');
+      expect(s.matches(ss)).toBe(true);
+    });
+
+    it('is false for null featured Syms of different names', () => {
+      ss = new Sym('S');
+      s = new Sym('NP');
+      expect(s.matches(ss)).toBe(false);
+    });
+
+    it('is true for two Syms with entirely different features', () => {
+      ss = new Sym('NP', { num: 'pl' });
+      s = new Sym('NP', { tense: 'past' });
+      expect(s.matches(ss)).toBe(true);
+    });
+
+    it('is false for Syms with the same feature, but different values', () => {
+      ss = new Sym('NP', { tense: 'pres' });
+      s = new Sym('NP', { tense: 'past' });
+      expect(s.matches(ss)).toBe(false);
+    });
+
+    it('is true for Syms with the same feature and value', () => {
+      ss = new Sym('NP', { tense: 'past' });
+      s = new Sym('NP', { tense: 'past' });
+      expect(s.matches(ss)).toBe(true);
+    });
+
+    it('is false for Syms with diff names, but same features & values', () => {
+      ss = new Sym('S', { tense: 'past' });
+      s = new Sym('NP', { tense: 'past' });
+      expect(s.matches(ss)).toBe(false);
+    });
+
+    it('matches plain objects that have the same name but no features', () => {
+      s = new Sym('NP', { tense: 'past' });
+      expect(s.matches({
+        name: 'NP'
+      })).toBe(true);
+    });
+
+    it('matches plain objects with the same name and diff features', () => {
+      s = new Sym('NP', { tense: 'past' });
+      expect(s.matches({
+        name: 'NP',
+        num: 'pl'
+      })).toBe(true);
+    });
+
+    it('fails for plain objects with same features but diff values', () => {
+      s = new Sym('NP', { tense: 'past' });
+      expect(s.matches({
+        name: 'NP',
+        tense: 'pres'
+      })).toBe(false);
+    });
+
+    it('matches plain objects with same features and same values', () => {
+      s = new Sym('NP', { tense: 'past' });
+      expect(s.matches({
+        name: 'NP',
+        tense: 'past'
+      })).toBe(true);
+    });
+
+    it('matches plain objects with same features and same values', () => {
+      s = new Sym('NP', { tense: 'past' });
+      expect(s.matches({
+        name: 'NP',
+        tense: 'past'
+      })).toBe(true);
+    });
+
+    it('is true for equivalent sub-features', () => {
+      ss = new Sym('N', { subcat: ['NP', 'NP', 'VP'] });
+      s = new Sym('N', { subcat: ['NP', 'NP', 'VP'] });
+      expect(s.matches(ss)).toBe(true);
+    });
+
+    it('is false for non-equivalent sub-features', () => {
+      ss = new Sym('N', { subcat: ['NP', 'NP', 'VP'] });
+      s = new Sym('N', { subcat: ['NP', 'VP'] });
+      expect(s.matches(ss)).toBe(false);
+    });
+
+    it('is true with Sym objects as features/sub-features', () => {
+      ss = new Sym('N');
+      s = new Sym('V');
+
+      var ps = new Sym('S', { subcat: [ss, s] })
+        , os = new Sym('S', { subcat: [ss, s] });
+
+      expect(ps.matches(os)).toBe(true);
+    });
+
+    it('is true with Sym objects as features/sub-features', () => {
+      ss = new Sym('N');
+      s = new Sym('V');
+
+      var ps = new Sym('S', { subcat: [ss, s] })
+        , os = new Sym('S', { subcat: [ss] });
+
+      expect(ps.matches(os)).toBe(false);
     });
 
   });
