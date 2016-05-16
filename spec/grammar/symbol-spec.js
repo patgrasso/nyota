@@ -5,7 +5,7 @@ var   s, ss, f;
 
 describe('Sym', () => {
 
-  describe('constructor', () => {
+  describe('constructor()', () => {
 
     it('rejects 0 parameters', () => {
       f = () => new Sym();
@@ -75,7 +75,7 @@ describe('Sym', () => {
 
   });
 
-  describe('equals', () => {
+  describe('equals()', () => {
 
     it('is true when the same Sym is passed twice', () => {
       s = new Sym('NP');
@@ -129,7 +129,7 @@ describe('Sym', () => {
 
   });
 
-  describe('matches', () => {
+  describe('matches()', () => {
 
     it('is true when the same Sym is passed twice', () => {
       s = new Sym('NP', { num: 'pl' });
@@ -239,11 +239,21 @@ describe('Sym', () => {
       expect(ps.matches(os)).toBe(true);
     });
 
-    it('is true with Sym objects as features/sub-features', () => {
+    it('is false when features are arrays of different lengths', () => {
       ss = new Sym('N');
       s = new Sym('V');
 
       var ps = new Sym('S', { subcat: [ss, s] })
+        , os = new Sym('S', { subcat: [ss] });
+
+      expect(ps.matches(os)).toBe(false);
+    });
+
+    it('is false when features have different Sym values', () => {
+      ss = new Sym('N');
+      s = new Sym('V');
+
+      var ps = new Sym('S', { subcat: [s] })
         , os = new Sym('S', { subcat: [ss] });
 
       expect(ps.matches(os)).toBe(false);
