@@ -42,6 +42,11 @@ describe('Sym', () => {
       expect(f).toThrowError(TypeError);
     });
 
+    it('throws if `name` is specified as well as `features.name`',  () => {
+      f = () => new Sym('S', { name: 'S' });
+      expect(f).toThrowError(Error);
+    });
+
   });
 
   describe('name', () => {
@@ -71,6 +76,14 @@ describe('Sym', () => {
       s = new Sym('NP', { num: 'sg' });
       expect(s.num).toBe('sg');
       expect(Object.keys(s).indexOf('num')).not.toBe(-1);
+    });
+
+  });
+
+  describe('equals() [static]', () => {
+
+    it('returns true if both arguments are null', () => {
+      expect(Sym.equals(null, null)).toBe(true);
     });
 
   });
@@ -125,6 +138,45 @@ describe('Sym', () => {
       expect(s.equals({
         misMatched: 'property'
       })).toBe(false);
+    });
+
+    it('successfully compares sub-features (feature that are objects)', () => {
+      ss = new Sym('V', { type: { sub: 'NP', obj: 'NP' } });
+      s = new Sym('V', { type: { sub: 'NP', obj: 'NP' } });
+      expect(s.equals(ss)).toBe(true);
+    });
+
+    it('fails when sub-features do not match', () => {
+      ss = new Sym('V', { type: { sub: 'NP', obj: 'P' } });
+      s = new Sym('V', { type: { sub: 'NP', obj: 'VP' } });
+      expect(s.equals(ss)).toBe(false);
+    });
+
+    it('ignores features that are functions', () => {
+      ss = new Sym('N', {
+        type  : 'person',
+        age   : 20,
+        greet : (name) => `Hello ${name}!`
+      });
+      s = new Sym('N', {
+        type  : 'person',
+        age   : 20,
+        greet : () => 'I don\'t want to talk right now'
+      });
+      expect(s.equals(ss)).toBe(true);
+    });
+
+  });
+
+  describe('matches() [static]', () => {
+
+    it('returns true if both arguments are null', () => {
+      expect(Sym.matches(null, null)).toBe(true);
+    });
+
+    it('throws if the specified `env` is not an object', () => {
+      f = () => Sym.matches(null, null, 'environment');
+      expect(f).toThrowError(TypeError);
     });
 
   });
@@ -257,6 +309,20 @@ describe('Sym', () => {
         , os = new Sym('S', { subcat: [ss] });
 
       expect(ps.matches(os)).toBe(false);
+    });
+
+    it('ignores features that are functions', () => {
+      ss = new Sym('N', {
+        type  : 'person',
+        age   : 20,
+        greet : (name) => `Hello ${name}!`
+      });
+      s = new Sym('N', {
+        type  : 'person',
+        age   : 20,
+        greet : () => 'I don\'t want to talk right now'
+      });
+      expect(s.matches(ss)).toBe(true);
     });
 
   });
