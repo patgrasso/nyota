@@ -1,8 +1,15 @@
 
+
 # Nyota :stars:
 Nyota is an intelligent communication officer for your computer. She understands
 English and will carry out your every command. Well, only those commands you teach
 to her.
+
+Nyota is different from Siri and Google Now in that she is build for actionable
+commands. She is not a question bot, or a conversation AI (although those might
+make nifty plugins), but rather an officer who awaits commands from the captain of
+your computer, you, and carries them out. This project is inspired by the prospect
+of human-like interaction with computers.
 
 
 ## A Plugin-Based NLP
@@ -16,11 +23,31 @@ contexts, and their meaning (a verb might represent a function that takes a subj
 and a direct object, and performs some action with them).
 
 
+## Installation
+Clone Nyota from github:
+```
+  git clone https://github.com/patgrasso/nyota.git
+```
+Or, get Nyota from NPM:
+```
+  npm install nyota
+```
+
+
+## Testing
+Testing Nyota requres jasmine (2.0+). All specs can be found in `spec/`. To run
+all tests, simply run `jasmine` in the project's root.
+
+
+## Contributing
+Please see [CONTRIBUTING](CONTRIBUTING) for details about this.
+
+
 ## Concepts
 To gain a better understanding of NLP and the magic that makes Nyota work, take a
-look at [NLTK](http://www.nltk.org) and perhaps give Natural Language Processing
-with Python a read. It is a great resource for understanding the concepts behind
-understanding natural language that Nyota implements.
+look at [NLTK](http://www.nltk.org) and perhaps give *Natural Language Processing
+with Python* a read. They are great resources for understanding the concepts behind
+natural language that Nyota implements.
 
 
 ## License
