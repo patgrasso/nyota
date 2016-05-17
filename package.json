@@ -4,7 +4,10 @@
   "description": "Processes and responds to your words, spoken through the command line.",
   "main": "index.js",
   "scripts": {
-    "test": "istanbul cover --include-all-sources jasmine"
+    "lint": "eslint . --ignore-pattern coverage",
+    "test": "jasmine",
+    "coverage": "istanbul cover --include-all-sources jasmine",
+    "coveralls": "istanbul cover --include-all-sources jasmine --captureExceptions && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
   },
   "keywords": [
     "nlp",
@@ -15,6 +18,7 @@
   "author": "Patrick Grasso",
   "license": "GPL-3",
   "devDependencies": {
+    "coveralls": "^2.11.9",
     "istanbul": "^0.4.3",
     "jasmine": "^2.4.1"
   }

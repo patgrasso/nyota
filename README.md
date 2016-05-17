@@ -30,7 +30,7 @@ Clone nyota from github:
 ```
 
 
-## Try It Out
+## Try It
 ```javascript
 const CFG = require('./grammar/cfg');
 //const rd  = require('./parsing/shift-reduce');
@@ -41,11 +41,6 @@ cfg.production('S', { name: 'NP', num: '?n' }, { name: 'VP', num: '?n' });
 cfg.production('NP', 'Det', 'NP');
 cfg.production('NP', 'Adj', 'NP');
 cfg.production({ name: 'NP', num: '?n' }, { name: 'N', num: '?n' });
-cfg.production(
-  { name: 'VP', num: '?n' },
-  { name: 'V' , num: '?n' },
-  { name: 'NP', num: '?n' }
-);
 cfg.production({ name: 'VP', num: '?n' }, { name: 'V' , num: '?n' }, 'AP');
 cfg.production('AP', 'Adv', 'Adj');
 cfg.production('AP', 'Adj');
@@ -62,7 +57,6 @@ cfg.production('Adj', 'yellow');
 //rd.parse('Nyota is very intelligent');
 //rd.parse('bananas are yellow');
 ```
-
 
 
 ## Testing
