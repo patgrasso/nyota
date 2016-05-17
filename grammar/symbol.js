@@ -98,7 +98,7 @@ class Sym {
 
     // Both are null -> true
     if (symA == null && symB == null) {
-      return true;
+      return {};
     }
 
     // If either symA or symB is not an object, delegate to Sym.equals()
@@ -112,9 +112,9 @@ class Sym {
       !compareAttributes(symA, symB, env) ||
       !compareAttributes(symB, symA, env)
     ) {
-      return false;
+      return null;
     }
-    return true;
+    return env;
   }
 
 }
@@ -174,6 +174,9 @@ function checkVariables(symA, symB, prop, env) {
     , varB = extractVarName(symB[prop]);
 
   if (varA && varB) {
+    if (!env[varA] && !env[varB]) {
+      return true;
+    }
     if (
       !checkOrSetVariable(varA, env, env[varB] || symB[prop]) ||
       !checkOrSetVariable(varB, env, env[varA] || symA[prop])

@@ -171,7 +171,7 @@ describe('Sym', () => {
   describe('matches() [static]', () => {
 
     it('returns true if both arguments are null', () => {
-      expect(Sym.matches(null, null)).toBe(true);
+      expect(Sym.matches(null, null)).toBeTruthy();
     });
 
     it('throws if the specified `env` is not an object', () => {
@@ -185,56 +185,56 @@ describe('Sym', () => {
 
     it('is true when the same Sym is passed twice', () => {
       s = new Sym('NP', { num: 'pl' });
-      expect(s.matches(s)).toBe(true);
+      expect(s.matches(s)).toBeTruthy();
     });
 
     it('is true when two similar Syms are given', () => {
       ss = new Sym('NP', { num: 'pl' });
       s = new Sym('NP', { num: 'pl' });
-      expect(s.matches(ss)).toBe(true);
+      expect(s.matches(ss)).toBeTruthy();
     });
 
     it('is true for null featured Syms of the same name', () => {
       ss = new Sym('NP');
       s = new Sym('NP');
-      expect(s.matches(ss)).toBe(true);
+      expect(s.matches(ss)).toBeTruthy();
     });
 
     it('is false for null featured Syms of different names', () => {
       ss = new Sym('S');
       s = new Sym('NP');
-      expect(s.matches(ss)).toBe(false);
+      expect(s.matches(ss)).toBeFalsy();
     });
 
     it('is true for two Syms with entirely different features', () => {
       ss = new Sym('NP', { num: 'pl' });
       s = new Sym('NP', { tense: 'past' });
-      expect(s.matches(ss)).toBe(true);
+      expect(s.matches(ss)).toBeTruthy();
     });
 
     it('is false for Syms with the same feature, but different values', () => {
       ss = new Sym('NP', { tense: 'pres' });
       s = new Sym('NP', { tense: 'past' });
-      expect(s.matches(ss)).toBe(false);
+      expect(s.matches(ss)).toBeFalsy();
     });
 
     it('is true for Syms with the same feature and value', () => {
       ss = new Sym('NP', { tense: 'past' });
       s = new Sym('NP', { tense: 'past' });
-      expect(s.matches(ss)).toBe(true);
+      expect(s.matches(ss)).toBeTruthy();
     });
 
     it('is false for Syms with diff names, but same features & values', () => {
       ss = new Sym('S', { tense: 'past' });
       s = new Sym('NP', { tense: 'past' });
-      expect(s.matches(ss)).toBe(false);
+      expect(s.matches(ss)).toBeFalsy();
     });
 
     it('matches plain objects that have the same name but no features', () => {
       s = new Sym('NP', { tense: 'past' });
       expect(s.matches({
         name: 'NP'
-      })).toBe(true);
+      })).toBeTruthy();
     });
 
     it('matches plain objects with the same name and diff features', () => {
@@ -242,7 +242,7 @@ describe('Sym', () => {
       expect(s.matches({
         name: 'NP',
         num: 'pl'
-      })).toBe(true);
+      })).toBeTruthy();
     });
 
     it('fails for plain objects with same features but diff values', () => {
@@ -250,7 +250,7 @@ describe('Sym', () => {
       expect(s.matches({
         name: 'NP',
         tense: 'pres'
-      })).toBe(false);
+      })).toBeFalsy();
     });
 
     it('matches plain objects with same features and same values', () => {
@@ -258,7 +258,7 @@ describe('Sym', () => {
       expect(s.matches({
         name: 'NP',
         tense: 'past'
-      })).toBe(true);
+      })).toBeTruthy();
     });
 
     it('matches plain objects with same features and same values', () => {
@@ -266,19 +266,19 @@ describe('Sym', () => {
       expect(s.matches({
         name: 'NP',
         tense: 'past'
-      })).toBe(true);
+      })).toBeTruthy();
     });
 
     it('is true for equivalent sub-features', () => {
       ss = new Sym('N', { subcat: ['NP', 'NP', 'VP'] });
       s = new Sym('N', { subcat: ['NP', 'NP', 'VP'] });
-      expect(s.matches(ss)).toBe(true);
+      expect(s.matches(ss)).toBeTruthy();
     });
 
     it('is false for non-equivalent sub-features', () => {
       ss = new Sym('N', { subcat: ['NP', 'NP', 'VP'] });
       s = new Sym('N', { subcat: ['NP', 'VP'] });
-      expect(s.matches(ss)).toBe(false);
+      expect(s.matches(ss)).toBeFalsy();
     });
 
     it('is true with Sym objects as features/sub-features', () => {
@@ -288,7 +288,7 @@ describe('Sym', () => {
       var ps = new Sym('S', { subcat: [ss, s] })
         , os = new Sym('S', { subcat: [ss, s] });
 
-      expect(ps.matches(os)).toBe(true);
+      expect(ps.matches(os)).toBeTruthy();
     });
 
     it('is false when features are arrays of different lengths', () => {
@@ -298,7 +298,7 @@ describe('Sym', () => {
       var ps = new Sym('S', { subcat: [ss, s] })
         , os = new Sym('S', { subcat: [ss] });
 
-      expect(ps.matches(os)).toBe(false);
+      expect(ps.matches(os)).toBeFalsy();
     });
 
     it('is false when features have different Sym values', () => {
@@ -308,7 +308,7 @@ describe('Sym', () => {
       var ps = new Sym('S', { subcat: [s] })
         , os = new Sym('S', { subcat: [ss] });
 
-      expect(ps.matches(os)).toBe(false);
+      expect(ps.matches(os)).toBeFalsy();
     });
 
     it('ignores features that are functions', () => {
@@ -322,7 +322,7 @@ describe('Sym', () => {
         age   : 20,
         greet : () => 'I don\'t want to talk right now'
       });
-      expect(s.matches(ss)).toBe(true);
+      expect(s.matches(ss)).toBeTruthy();
     });
 
   });
@@ -332,40 +332,40 @@ describe('Sym', () => {
     it('is true when one of two similar Syms has "?[var]" as a feature', () => {
       s = new Sym('V', { num: '?n' });
       ss = new Sym('V', { num: 'pl' });
-      expect(s.matches(ss)).toBe(true);
+      expect(s.matches(ss)).toEqual({ n: 'pl' });
     });
 
     it('is true when both Syms have a variable feature', () => {
       s = new Sym('V', { num: '?n' });
       ss = new Sym('V', { num: '?t' });
-      expect(s.matches(ss)).toBe(true);
+      expect(s.matches(ss)).toEqual({});
     });
 
     it(`is true if multiple features specify the same var, and corresponding
         features have the same values`.replace(/\s+/g, ' '), () => {
       s = new Sym('V', { numA: '?n', numB: '?n' });
       ss = new Sym('V', { numA: 'sg', numB: 'sg' });
-      expect(s.matches(ss)).toBe(true);
+      expect(s.matches(ss)).toEqual({ n: 'sg' });
     });
 
     it(`is false if multiple features specify the same var, and corresponding
         features have different values`.replace(/\s+/g, ' '), () => {
       s = new Sym('V', { numA: '?n', numB: '?n' });
       ss = new Sym('V', { numA: 'sg', numB: 'pl' });
-      expect(s.matches(ss)).toBe(false);
-      expect(ss.matches(s)).toBe(false);
+      expect(s.matches(ss)).toBeFalsy();
+      expect(ss.matches(s)).toBeFalsy();
     });
 
     it('is false if one Sym omits the other\'s variable feature', () => {
       s = new Sym('V', { num: '?n' });
       ss = new Sym('V');
-      expect(s.matches(ss)).toBe(false);
+      expect(s.matches(ss)).toBeFalsy();
     });
 
     it('fails if two props have two different vars and are both bound', () => {
       s   = new Sym('V', { num: 'pl', subj: '?s',   tense: '?s' });
       ss  = new Sym('V', { num: '?n', subj: 'none', tense: '?n' });
-      expect(s.matches(ss)).toBe(false);
+      expect(s.matches(ss)).toBeFalsy();
     });
 
   });

@@ -1,8 +1,7 @@
 
-# nyota :sparkles:
-[![Build Status][travis-image]][travis-url] [![Coveralls Status][coveralls-image]][coveralls-url]
+# nyota :sparkles: [![Build Status][travis-image]][travis-url] [![Coveralls Status][coveralls-image]][coveralls-url]
 
-Nyota is an intelligent communications officer for your computer. She
+Nyota is an intelligent English-speaking officer for your computer. She
 understands English and will carry out your every command. Well, only those
 commands you teach to her.
 
@@ -20,15 +19,15 @@ knowledge given to her (the knowledge of specific grammatical feature
 structures, or words with context). Once a sentence has been parsed, an action
 can be composed using the phrase's components.
 
-Users can configure nyota by specifying words, their appropriate grammatical
+Users can configure Nyota by specifying words, their appropriate grammatical
 contexts, and their meaning (a verb might represent a function that takes a
 subject and a direct object, and performs some action with them).
 
 
 ## Installation
-Clone nyota from github:
+Clone Nyota from github:
 ```
-git clone https://github.com/patgrasso/nyota
+git clone https://github.com/patgrasso/Nyota
 ```
 
 
@@ -62,7 +61,7 @@ cfg.production('Adj', 'yellow');
 
 
 ## Testing
-Testing nyota requres jasmine (2.0+). All specs can be found in `spec/`. To run
+Testing Nyota requres jasmine (2.0+). All specs can be found in `spec/`. To run
 all tests, simply run `npm test` in the project's root.
 
 
@@ -71,10 +70,10 @@ Please see [CONTRIBUTING.md](CONTRIBUTING.md) for details about this.
 
 
 ## Concepts
-To gain a better understanding of NLP and the magic that makes nyota work, take
+To gain a better understanding of NLP and the magic that makes Nyota work, take
 a look at [NLTK](http://www.nltk.org) and perhaps give *Natural Language
 Processing with Python* a read. They are great resources for understanding the
-natural language concepts that nyota implements.
+natural language concepts that Nyota implements.
 
 
 ## License
