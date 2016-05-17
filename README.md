@@ -6,11 +6,12 @@ Nyota is an intelligent communications officer for your computer. She
 understands English and will carry out your every command. Well, only those
 commands you teach to her.
 
-Nyota is different from Siri and Google Now in that she is build for actionable
-commands. She is not a question bot, or a conversation AI (although those might
-make nifty plugins), but rather an officer who awaits commands from the captain
-of your computer, you, and carries them out. This project is inspired by the
-aspiration of human-like interaction with computers.
+Nyota is different from other language processors, such as Siri and Google Now,
+in that she is built to execute actionable commands. She is not a question bot,
+or a conversation AI (although those might make nifty plugins), but rather an
+officer who awaits commands from the captain of your computer, you, and carries
+them out. This project is inspired by the aspiration of human-like interaction
+with computers.
 
 
 ## A Plugin-Based NLP
@@ -27,7 +28,7 @@ subject and a direct object, and performs some action with them).
 ## Installation
 Clone nyota from github:
 ```
-  git clone https://github.com/patgrasso/nyota.git
+git clone https://github.com/patgrasso/nyota
 ```
 
 
@@ -66,7 +67,7 @@ all tests, simply run `npm test` in the project's root.
 
 
 ## Contributing
-Please see [CONTRIBUTING](CONTRIBUTING) for details about this.
+Please see [CONTRIBUTING.md](CONTRIBUTING.md) for details about this.
 
 
 ## Concepts

@@ -353,11 +353,18 @@ describe('Sym', () => {
       s = new Sym('V', { numA: '?n', numB: '?n' });
       ss = new Sym('V', { numA: 'sg', numB: 'pl' });
       expect(s.matches(ss)).toBe(false);
+      expect(ss.matches(s)).toBe(false);
     });
 
     it('is false if one Sym omits the other\'s variable feature', () => {
       s = new Sym('V', { num: '?n' });
       ss = new Sym('V');
+      expect(s.matches(ss)).toBe(false);
+    });
+
+    it('fails if two props have two different vars and are both bound', () => {
+      s   = new Sym('V', { num: 'pl', subj: '?s',   tense: '?s' });
+      ss  = new Sym('V', { num: '?n', subj: 'none', tense: '?n' });
       expect(s.matches(ss)).toBe(false);
     });
 

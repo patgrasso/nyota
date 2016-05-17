@@ -17,7 +17,7 @@ describe('Production', () => {
     npPl  = new Sym('NP', { num: 'sg' });
   });
 
-  describe('constructor', () => {
+  describe('constructor()', () => {
 
     it('rejects if no LHS is specified', () => {
       f = () => new Production();
@@ -42,7 +42,16 @@ describe('Production', () => {
 
   });
 
-  describe('equals', () => {
+  describe('equals() [static]', () => {
+
+    it('throws an error when two incomparable things are passed in', () => {
+      f = () => Production.equals('hello', 'there');
+      expect(f).toThrowError(TypeError);
+    });
+
+  });
+
+  describe('equals()', () => {
 
     it('is a static method', () => {
       expect(Production.equals).not.toBeUndefined();
@@ -114,6 +123,17 @@ describe('Production', () => {
     it('fails if the RHS (specified as sequential args) do not match', () => {
       p = new Production(s, np, vp);
       expect(p.equals(s, npSg, pp)).toBe(false);
+    });
+
+    it('throws when a production is compared with an unexpected type', () => {
+      p = new Production(s, np, vp);
+      f = () => p.equals('incomparable type -- string');
+      expect(f).toThrowError(TypeError);
+    });
+
+    it('fails when a production is compared with a RHS larger its rhs', () => {
+      p = new Production(s, np);
+      expect(p.equals([np, vp, npSg, npPl])).toBe(false);
     });
 
   });

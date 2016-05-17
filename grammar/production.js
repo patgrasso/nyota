@@ -15,7 +15,7 @@ class Production {
     }
 
     this.lhs = lhs;
-    this.rhs = rhs || [];
+    this.rhs = rhs;
 
     Object.defineProperty(this, 'equals', {
       value: Production.equals.bind(null, this)

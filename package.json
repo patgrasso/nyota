@@ -6,8 +6,8 @@
   "scripts": {
     "lint": "eslint . --ignore-pattern coverage",
     "test": "jasmine",
-    "coverage": "istanbul cover --include-all-sources jasmine",
-    "coveralls": "istanbul cover --include-all-sources jasmine --captureExceptions && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
+    "coverage": "istanbul cover --include-all-sources -x **/spec/** jasmine",
+    "coveralls": "istanbul cover --include-all-sources -x **/spec/** jasmine --captureExceptions && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
   },
   "keywords": [
     "nlp",
