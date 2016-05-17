@@ -61,8 +61,7 @@ cfg.production('Adj', 'yellow');
 
 ## Testing
 Testing nyota requres jasmine (2.0+). All specs can be found in `spec/`. To run
-all tests, simply run `npm test` in the project's root. This will also generate
-a code coverage report in `coverage/`
+all tests, simply run `npm test` in the project's root.
 
 
 ## Contributing
