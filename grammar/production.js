@@ -20,6 +20,9 @@ class Production {
     Object.defineProperty(this, 'equals', {
       value: Production.equals.bind(null, this)
     });
+    Object.defineProperty(this, 'matches', {
+      value: Production.matches.bind(null, this)
+    });
   }
 
 
@@ -57,7 +60,7 @@ class Production {
     var i;
 
     if (!(prod instanceof Production)) {
-      throw new TypeError('First argument must be an instance of  Production');
+      throw new TypeError('First argument must be an instance of Production');
     }
 
     // If > 3 args are specified, then the caller is specifying the RHS with
@@ -104,6 +107,67 @@ class Production {
       }
       for (i in prod.rhs) {
         if (!prod.rhs[i].equals(rhs[i])) {
+          return false;
+        }
+      }
+      return true;
+    }
+    throw new TypeError('Cannot compare whatever was passed in');
+  }
+
+
+  static matches(prod, lhs, rhs) {
+    var env = {}
+      , i;
+
+    if (!(prod instanceof Production)) {
+      throw new TypeError('First argument must be an instance of Production');
+    }
+
+    // If > 3 args are specified, then the caller is specifying the RHS with
+    // those symbols at [2:]
+    if (arguments.length > 3) {
+      rhs = Array.prototype.slice.call(arguments, 2);
+    }
+
+    // The case where `lhs` is a Production (Production v Production)
+    if (lhs instanceof Production) {
+      rhs = lhs.rhs;
+      lhs = lhs.lhs;
+    }
+
+    // The case where lhs AND rhs are specified
+    if (Array.isArray(rhs)) {
+      // a. lhs is a Sym
+      if (
+        lhs != null &&
+        (!prod.lhs.matches(lhs, env) ||
+        prod.rhs.length !== rhs.length)
+      ) {
+        return false;
+      }
+      // b. lhs is null (in which case, ignore it and only consider the RHS)
+      for (i in prod.rhs) {
+        if (!prod.rhs[i].matches(rhs[i], env)) {
+          return false;
+        }
+      }
+      return true;
+    }
+
+    // The case where only lhs is specified
+    if ((lhs instanceof Sym) ) {
+      return prod.lhs.matches(lhs) !== null;
+    }
+
+    // The case where `lhs` is actually the rhs incognito
+    if (Array.isArray(lhs)) {
+      rhs = lhs;
+      if (prod.rhs.length !== rhs.length) {
+        return false;
+      }
+      for (i in prod.rhs) {
+        if (!prod.rhs[i].matches(rhs[i], env)) {
           return false;
         }
       }
