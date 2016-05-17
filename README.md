@@ -1,6 +1,7 @@
 
+# nyota :sparkles:
+[![Build Status][travis-image]][travis-url] [![Coveralls Status][coveralls-image]][coveralls-url]
 
-# nyota :stars:
 Nyota is an intelligent communications officer for your computer. She
 understands English and will carry out your every command. Well, only those
 commands you teach to her.
@@ -78,4 +79,9 @@ natural language concepts that nyota implements.
 ## License
 GPL-3
 
+
+[travis-image]: https://travis-ci.org/patgrasso/nyota.svg?branch=master
+[travis-url]: https://travis-ci.org/patgrasso/nyota
+[coveralls-image]: https://coveralls.io/repos/patgrasso/nyota/badge.svg?branch=master&service=github
+[coveralls-url]: https://coveralls.io/github/patgrasso/nyota?branch=master
 
