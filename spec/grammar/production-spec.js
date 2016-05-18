@@ -215,11 +215,6 @@ describe('Production', () => {
       expect(p.matches(s, [npSg, npPl])).toBe(false);
     });
 
-    it('interprets > 2 arguments as LHS = args[0], RHS = args[1:]', () => {
-      p = new Production(s, np, vp);
-      expect(p.matches(s, np, vp)).toBe(true);
-    });
-
     it('fails if the RHS (specified as sequential args) do not match', () => {
       p = new Production(s, np, vp);
       expect(p.matches(s, npSg, pp)).toBe(false);
@@ -269,12 +264,12 @@ describe('Production', () => {
 
     it('maintains environment between LHS & RHS (true on good matches)', () => {
       p = new Production(npVarNum, npVarNum, vpVarNum);
-      expect(p.matches(npPl, npPl, vpPl)).toBe(true);
+      expect(p.matches(npPl, [npPl, vpPl])).toBe(true);
     });
 
     it('maintains environment between LHS & RHS (false on bad matches)', () => {
       p = new Production(npVarNum, npVarNum, vpVarNum);
-      expect(p.matches(npPl, npSg, vpSg)).toBe(false);
+      expect(p.matches(npPl, [npSg, vpSg])).toBe(false);
     });
 
   });

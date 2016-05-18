@@ -24,8 +24,7 @@ class Production {
    *    an array, or a sequence of arguments
    */
   constructor(lhs, rhs) {
-    if (lhs == null) {
-      throw new TypeError('LHS cannot be null');
+    if (lhs == null) { throw new TypeError('LHS cannot be null');
     }
 
     if (arguments.length > 2 || !Array.isArray(rhs)) {
@@ -104,16 +103,15 @@ class Production {
    *    (for instance, if only the RHS is passed in, only the RHS will be
    *    compared). If any of the comparisons fail, false
    */
-  static matches(prod, lhs, rhs) {
+  static matches(prod, lhs, rhs, env) {
     var ret;
 
-    // If there are more arguments than named, assume those past the 2nd
-    // comprise the RHS
-    if (arguments.length > 3) {
-      rhs = Array.prototype.slice.call(arguments, 2);
+    // If the rhs is not an array, make it an array
+    if (rhs != null && !Array.isArray(rhs)) {
+      rhs = [rhs];
     }
 
-    ret = compareProduction(Sym.matches, prod, lhs, rhs);
+    ret = compareProduction(Sym.matches, prod, lhs, rhs, env);
     return (ret !== false) && (ret !== null);
   }
 
@@ -162,9 +160,10 @@ class Production {
  *      if (predicate(...) === true) { } is not guaranteed
  *    ```
  */
-function compareProduction(predicate, prod, lhs, rhs) {
-  var env = {}
-    , i;
+function compareProduction(predicate, prod, lhs, rhs, env) {
+  var i;
+
+  env = env || {};
 
   if (!(prod instanceof Production)) {
     throw new TypeError('First argument must be an instance of Production');

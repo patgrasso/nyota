@@ -4,7 +4,7 @@ const CFG         = require('../../grammar/cfg');
 const Sym         = require('../../grammar/symbol');
 const Production  = require('../../grammar/production');
 
-var   cfg, s, p, f;
+var   cfg, s, p, f, env;
 
 describe('CFG', () => {
 
@@ -208,17 +208,58 @@ describe('CFG', () => {
       );
     });
 
-    it('accepts > 2 arguments and assumes a sequence of RHS symbols', () => {
-      p = cfg.productions(cfg.symbol('S'), cfg.symbol('NP'), cfg.symbol('VP'));
-      expect(p.length).toBe(1);
-      expect(p).toContain(cfg.production('S', 'NP', 'VP'));
-    });
-
     it('accepts a lone Sym for the RHS argument (turns it into an [])', () => {
       cfg.production('S', 'NP');
       p = cfg.productions(cfg.symbol('S'), cfg.symbol('NP'));
       expect(p.length).toBe(1);
       expect(p).toContain(cfg.production('S', 'NP'));
+    });
+
+    // With variables
+
+    it('omits productions that violate the bound environment variables', () => {
+      var vp;
+
+      env = {};
+
+      cfg.production('S', [
+        { name: 'NP', num: '?n' },
+        { name: 'VP', num: '?n' }
+      ]);
+      cfg.production({ name: 'NP', num: '?n' }, { name: 'N', num: '?n' });
+      vp = cfg.production({ name: 'VP', num: '?n' }, [
+        { name: 'V', num: '?n' },
+        { name: 'NP', num: '?n' }
+      ]);
+
+      cfg.production({ name: 'N', num: 'pl' }, 'elephants');
+      cfg.production({ name: 'V', num: 'pl' }, 'eat');
+      cfg.production({ name: 'N', num: 'sg' }, 'peanut');
+
+      // Get the production N[num=pl] -> 'elephants'
+      p = cfg.productions(null, cfg.symbol('elephants'), env);
+
+      // Get the production NP[num=?n] -> N[num=?n]
+      p = cfg.productions(null, p[0].lhs, env);
+
+      // At this point, the environment should be {n: 'pl'}
+      expect(env.n).toBe('pl');
+
+      p = cfg.productions(null, cfg.symbol('eat'), env);
+      p = cfg.productions(null, [
+        p[0].lhs,
+        { name: 'NP', num: '?n' }
+      ], env);
+      expect(p.length).toBe(1);
+      expect(p).toContain(vp);
+
+      p = cfg.productions(null, cfg.symbol('peanut'), env);
+      p = cfg.productions(null, [
+        { name: 'V', num: '?n' },
+        p[0].lhs
+      ], env);
+      expect(p.length).toBe(0);
+      expect(p).not.toContain(vp);
     });
 
   });

@@ -88,7 +88,7 @@ class CFG {
     rhs = rhs.map(obj => this.symbol(obj));
 
     for (i in productions) {
-      if (productions[i].equals(lhs, rhs)) {
+      if (productions[i].matches(lhs, rhs)) {
         return productions[i];
       }
     }
@@ -101,17 +101,14 @@ class CFG {
     return production;
   }
 
-  productions(lhs, rhs) {
+  productions(lhs, rhs, env) {
     if (lhs == null && rhs == null) {
       return priv[this].productions;
-    }
-    if (arguments.length > 2) {
-      rhs = Array.prototype.slice.call(arguments, 1);
     }
     if (rhs != null && !Array.isArray(rhs)) {
       rhs = [rhs];
     }
-    return priv[this].productions.filter(p => p.equals(lhs, rhs));
+    return priv[this].productions.filter(p => p.matches(lhs, rhs, env));
   }
 
 }
