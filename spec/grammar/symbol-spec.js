@@ -356,10 +356,10 @@ describe('Sym', () => {
       expect(ss.matches(s)).toBeFalsy();
     });
 
-    it('is false if one Sym omits the other\'s variable feature', () => {
+    it('is true if one Sym omits the other\'s variable feature', () => {
       s = new Sym('V', { num: '?n' });
       ss = new Sym('V');
-      expect(s.matches(ss)).toBeFalsy();
+      expect(s.matches(ss)).toBeTruthy();
     });
 
     it('fails if two props have two different vars and are both bound', () => {

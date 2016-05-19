@@ -173,6 +173,12 @@ function checkVariables(symA, symB, prop, env) {
   var varA = extractVarName(symA[prop])
     , varB = extractVarName(symB[prop]);
 
+  if (
+    ((varA != null) && symB[prop] === undefined) ||
+    ((varB != null) && symA[prop] === undefined)
+  ) {
+    return true;
+  }
   if (varA && varB) {
     if (!env[varA] && !env[varB]) {
       return true;
@@ -183,13 +189,13 @@ function checkVariables(symA, symB, prop, env) {
     ) {
       return false;
     }
-  } else if (varA && !checkOrSetVariable(varA, env, symB[prop])) {
+  } else if ((varA != null) && !checkOrSetVariable(varA, env, symB[prop])) {
     return false;
-  } else if (varB && !checkOrSetVariable(varB, env, symA[prop])) {
+  } else if ((varB != null) && !checkOrSetVariable(varB, env, symA[prop])) {
     return false;
   }
-  if (varA || varB) {
-    return (env[varA] != null) || (env[varB] != null);
+  if ((varA != null) || (varB != null)) {
+    return (env[varB] != null) || (env[varA] != null);
   }
   return null;
 }
